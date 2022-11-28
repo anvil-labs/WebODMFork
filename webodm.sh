@@ -112,7 +112,7 @@ case $key in
     ;;
     --with-micmac)
     load_micmac_node=true
-    shift # past argument
+    shift # past argument	
     ;;
     --detached)
     detached=true
@@ -261,8 +261,6 @@ check_command(){
 }
 
 environment_check(){
-	check_command "docker" "https://www.docker.com/"
-	check_command "docker-compose" "Run \033[1mpip install docker-compose\033[0m" "pip install docker-compose"
 }
 
 run(){
@@ -293,7 +291,7 @@ start(){
 	echo "Make sure to issue a $0 down if you decide to change the environment."
 	echo ""
 
-	command="docker-compose -f docker-compose.yml"
+	command="docker compose -f docker-compose.yml"
 
     if [[ $WO_DEFAULT_NODES -gt 0 ]]; then
 		if [ "${GPU_NVIDIA}" = true ]; then
@@ -365,7 +363,7 @@ start(){
 }
 
 down(){
-	command="docker-compose -f docker-compose.yml"
+	command="docker compose -f docker-compose.yml"
 
 	if [ "${GPU_NVIDIA}" = true ]; then
 		command+=" -f docker-compose.nodeodm.gpu.nvidia.yml"
@@ -381,10 +379,10 @@ down(){
 }
 
 rebuild(){
-	run "docker-compose down --remove-orphans"
+	run "docker compose down --remove-orphans"
 	run "rm -fr node_modules/ || sudo rm -fr node_modules/"
 	run "rm -fr nodeodm/external/NodeODM || sudo rm -fr nodeodm/external/NodeODM"
-	run "docker-compose -f docker-compose.yml -f docker-compose.build.yml build --no-cache"
+	run "docker compose -f docker-compose.yml -f docker-compose.build.yml build --no-cache"
 	#run "docker images --no-trunc -aqf \"dangling=true\" | xargs docker rmi"
 	echo -e "\033[1mDone!\033[0m You can now start WebODM by running $0 start"
 }
@@ -403,7 +401,7 @@ run_tests(){
         echo -e "\033[1mDone!\033[0m Everything looks in order."
     else
         echo "Running tests in webapp container"
-        run "docker-compose exec webapp /bin/bash -c \"/webodm/webodm.sh test\""
+        run "docker compose exec webapp /bin/bash -c \"/webodm/webodm.sh test\""
     fi
 }
 
@@ -434,7 +432,7 @@ elif [[ $1 = "stop" ]]; then
 	environment_check
 	echo "Stopping WebODM..."
 
-	command="docker-compose -f docker-compose.yml"
+	command="docker compose -f docker-compose.yml"
 
 	if [ "${GPU_NVIDIA}" = true ]; then
 		command+=" -f docker-compose.nodeodm.gpu.nvidia.yml"
@@ -474,7 +472,7 @@ elif [[ $1 = "update" ]]; then
 		fi
 	fi
 
-	command="docker-compose -f docker-compose.yml"
+	command="docker compose -f docker-compose.yml"
 
 	if [[ $WO_DEFAULT_NODES -gt 0 ]]; then
 		if [ "${GPU_NVIDIA}" = true ]; then
