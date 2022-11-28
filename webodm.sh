@@ -261,6 +261,7 @@ check_command(){
 }
 
 environment_check(){
+	echo "pass"
 }
 
 run(){
